@@ -5,8 +5,8 @@ project(libaltparser VERSION 0.0.0 LANGUAGES CXX)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SOURCES 
-    lib.cpp
-    lib.h
+    Src/download.cpp
+    Src/download.h
 )
 
 add_library(libaltparser SHARED ${SOURCES})

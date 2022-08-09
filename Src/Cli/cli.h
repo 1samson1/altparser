@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 
+#include "download.h"
 #include "help.h"
 
 using namespace std;
@@ -16,6 +17,9 @@ private:
     vector<string> branches;
     bool outfile = false;
     string outfilename;
+
+    void parsArgs(int argc, char **argv);
+    void downloadCache();
 
 public:
     Cli(int argc, char ** argv);

@@ -16,6 +16,10 @@ set_target_properties(
         CXX_STANDARD_REQUIRED ON 
 )
 
+target_include_directories(altparser PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../Lib/Src
+)
+
 target_link_libraries(altparser libaltparser)
 
 
