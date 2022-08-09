@@ -4,8 +4,15 @@ project(altparser VERSION 0.0.0 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set(CLI_FILES
+    Cli/cli.cpp
+    Cli/cli.h
+    Cli/help.cpp
+    Cli/help.h
+)
 
-add_executable(altparser main.cpp ${UI_FILES})
+
+add_executable(altparser main.cpp ${CLI_FILES})
 
 set_target_properties( 
     altparser PROPERTIES
