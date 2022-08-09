@@ -9,7 +9,7 @@ fi
 mkdir $build_path
 
 cmake \
-	-S ./Src \
+	-S ./ \
 	-B $build_path \
 	-DCMAKE_BUILD_TYPE=$build_type
 
