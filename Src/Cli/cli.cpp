@@ -1,6 +1,7 @@
 #include "cli.h"
 
 #include "help.h"
+#include "differ.h"
 #include "download.h"
 
 using namespace std;
@@ -9,10 +10,15 @@ Cli::Cli(int argc, char **argv)
 {
     this->parsArgs(argc, argv);
 
+    auto paths = this->getPaths();
+
     if(!this->usecache)
     {
-        this->downloadCache();    
+        this->downloadCache(paths);    
     }
+
+    this->diff(paths);
+
 }
 
 void Cli::parsArgs(int argc, char **argv)
@@ -43,24 +49,45 @@ void Cli::parsArgs(int argc, char **argv)
         this->branches.push_back(arg);
     }
 
-    if (this->branches.size() == 0)
+    if (this->branches.size() <= 1)
     {
         cerr << "No enter branches" << endl;
         exit(1);
     } 
 }
-void Cli::downloadCache()
-{    
-    for(int i = 0; i < this->branches.size(); i++){
-        cout << "Downloading branch " << this->branches[i] << "..." << endl;
 
-        LibAltParser::Download download(this->branches[0]);
-        download.save("/tmp/" + this->branches[i] + ".json");
+vector<string> Cli::getPaths()
+{
+    vector<string> paths;
+
+    for(auto it = this->branches.begin(); it != this->branches.end(); it++){
+
+        paths.push_back("/tmp/" + *it + ".json");
 
     }
+
+    return paths;
 }
 
-Cli::~Cli()
+void Cli::downloadCache(vector<string> paths)
+{    
+    for(int i = 0; i < paths.size(); i++){
+
+        cout << "Downloading branch " << this->branches[i] << "..." << endl;
+
+        LibAltParser::Download download(this->branches[i]);
+        download.save(paths[i]);        
+    }    
+}
+
+void Cli::diff(vector<string> paths)
 {
-    
+    cout << "Loading files..." << endl;
+
+    LibAltParser::Differ differ(
+        paths[0],
+        paths[1]
+    );
+
+    differ.diff();
 }

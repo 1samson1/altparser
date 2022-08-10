@@ -4,12 +4,19 @@ project(altpars VERSION 0.0.0 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(SOURCES 
-    Src/download.cpp
+set(HEADERS
     Src/download.h
+    Src/differ.h
+    Src/package.h
 )
 
-add_library(altpars SHARED ${SOURCES})
+set(SOURCES 
+    Src/download.cpp
+    Src/differ.cpp
+    Src/package.cpp
+)
+
+add_library(altpars SHARED ${SOURCES} ${HEADERS})
 
 set_target_properties( 
     altpars PROPERTIES
