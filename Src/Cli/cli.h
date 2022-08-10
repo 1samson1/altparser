@@ -3,20 +3,15 @@
 
 #include <string>
 #include <iostream>
-#include <fstream>
 #include <vector>
-
-#include "download.h"
-#include "help.h"
-
-using namespace std;
 
 class Cli {
 
 private:
-    vector<string> branches;
+    std::vector<std::string> branches;
+    std::string outfilename;
     bool outfile = false;
-    string outfilename;
+    bool usecache = false;
 
     void parsArgs(int argc, char **argv);
     void downloadCache();

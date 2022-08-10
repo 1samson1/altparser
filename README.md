@@ -5,7 +5,7 @@ AltParser is a parser dependencies and diff them.
 ## Dependencies for build
 
 ```
-libcurl4-openssl-dev
+libcurl4-openssl-dev nlohmann-json3-dev
 ```
 
 ## Build 

@@ -1,9 +1,18 @@
 #include "cli.h"
 
+#include "help.h"
+#include "download.h"
+
+using namespace std;
+
 Cli::Cli(int argc, char **argv)
 {
     this->parsArgs(argc, argv);
-    this->downloadCache();    
+
+    if(!this->usecache)
+    {
+        this->downloadCache();    
+    }
 }
 
 void Cli::parsArgs(int argc, char **argv)
@@ -25,12 +34,18 @@ void Cli::parsArgs(int argc, char **argv)
             CliHelp::help();
         }
 
+        if(arg == "--cache")
+        {
+            this->usecache = true;
+            continue;
+        }
+
         this->branches.push_back(arg);
     }
 
     if (this->branches.size() == 0)
     {
-        cout << "No enter branches" << endl;
+        cerr << "No enter branches" << endl;
         exit(1);
     } 
 }

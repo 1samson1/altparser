@@ -20,6 +20,6 @@ target_include_directories(altparser PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../Lib/Src
 )
 
-target_link_libraries(altparser libaltparser)
+target_link_libraries(altparser altpars)
 
 
