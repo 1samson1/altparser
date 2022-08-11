@@ -64,7 +64,7 @@ void Differ::diff()
     }
 }
 
-string Differ::getStructJSON(){
+string Differ::getStructJSON(int indent){
     json data;
 
     for (auto &pkg : *this->onlyFirstExistPkgs)
@@ -82,7 +82,7 @@ string Differ::getStructJSON(){
         data["upperFirstPkgs"].push_back(pkg.toJSON());
     }    
 
-    return data.dump();
+    return data.dump(indent);
 }
 
 Differ::~Differ()

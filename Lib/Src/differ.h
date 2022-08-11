@@ -20,7 +20,7 @@ namespace LibAltParser {
         Differ(std::string filepath1, std::string filepath2);
 
         std::list<Package>* getPackeges(std::string filepath);
-        std::string getStructJSON();
+        std::string getStructJSON(int indent = 0);
 
         void diff();
 

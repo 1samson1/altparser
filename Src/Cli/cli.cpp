@@ -28,7 +28,7 @@ Cli::Cli(int argc, char **argv)
     }
     else 
     {
-        cout << this->diff(paths);
+        cout << this->diff(paths) << endl;
     }
 }
 
@@ -50,6 +50,14 @@ void Cli::parsArgs(int argc, char **argv)
         if(arg == "-h")
         {
             CliHelp::help();
+        }
+
+        if(arg == "--indent")
+        {
+            this->indent = stoi(argv[i+1]);
+
+            i++;
+            continue;
         }
 
         if(arg == "--cache")
@@ -105,7 +113,7 @@ string Cli::diff(vector<string> paths)
 
     differ.diff();
 
-    return differ.getStructJSON();    
+    return differ.getStructJSON(this->indent);    
 }
 
 void Cli::tofile(string filename, string data){

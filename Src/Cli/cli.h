@@ -12,6 +12,7 @@ private:
     std::string outfilename;
     bool outfile = false;
     bool usecache = false;
+    int indent = 0;
 
     void parsArgs(int argc, char **argv);
     std::vector<std::string> getPaths();
