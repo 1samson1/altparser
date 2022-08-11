@@ -11,8 +11,10 @@ namespace LibAltParser {
     class Differ
     {
     private:
-        std::list<Package>* branch1_pkgs;
-        std::list<Package>* branch2_pkgs;
+        std::list<Package>* onlyFirstExistPkgs;
+        std::list<Package>* onlySecondExistPkgs;
+        std::list<Package>* upperFirstPkgs;
+
 
     public:
         std::list<Package>* getPackeges(std::string filepath);

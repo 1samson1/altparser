@@ -1,6 +1,8 @@
 #ifndef LIB_PACKAGE_H
 #define LIB_PACKAGE_H
 
+#include "version.h"
+
 #include <string>
 #include <nlohmann/json.hpp>
 
@@ -16,14 +18,14 @@ namespace LibAltParser
         std::string name;
         std::string release;
         std::string source;
-        std::string version;
-    
+        Version version;
+
     public:
         Package(){};
         Package(nlohmann::json &obj);
 
-        std::string getName();
-        std::string getVersionWithoutDot();
+        std::string getName();  
+        std::string getVersion();
 
         bool operator== (Package &other);
         bool operator> (Package &other);

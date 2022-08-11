@@ -1,7 +1,5 @@
 #include "package.h"
 
-#include <iostream>
-
 using namespace std;
 using namespace LibAltParser;
 using json = nlohmann::json;
@@ -23,16 +21,9 @@ string Package::getName()
     return this->name;
 }
 
-string Package::getVersionWithoutDot()
+string Package::getVersion()
 {
-    string temp_version = this->version;
-
-    temp_version.erase(
-        remove(temp_version.begin(), temp_version.end(), '.'),
-        temp_version.end()
-    );
-
-    return temp_version;
+    return this->version.get();
 }
 
 bool Package::operator== (Package &other)
@@ -43,30 +34,8 @@ bool Package::operator== (Package &other)
     ;
 }
 
+
 bool Package::operator> (Package &other)
 {
-    int size;
-    string v1 = this->getVersionWithoutDot();
-    string v2 = other.getVersionWithoutDot();
-
-    if(v1.size() < v2.size())
-    {
-        size = v1.size();
-    }
-    else 
-    {
-        size = v2.size();
-    }
-
-    for (int i = 0; i < size; i++)
-    {
-        if(v1[i] > v2[i]){
-            return true;
-        }
-        if(v1[i] < v2[i]){
-            return false;
-        }
-    }    
-
-    return false;
+    return this->version > other.version;
 }

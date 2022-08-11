@@ -60,9 +60,9 @@ vector<string> Cli::getPaths()
 {
     vector<string> paths;
 
-    for(auto it = this->branches.begin(); it != this->branches.end(); it++){
+    for(auto &el : this->branches){
 
-        paths.push_back("/tmp/" + *it + ".json");
+        paths.push_back("/tmp/" + el + ".json");
 
     }
 

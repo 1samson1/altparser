@@ -8,12 +8,14 @@ set(HEADERS
     Src/download.h
     Src/differ.h
     Src/package.h
+    Src/version.h
 )
 
 set(SOURCES 
     Src/download.cpp
     Src/differ.cpp
     Src/package.cpp
+    Src/version.cpp
 )
 
 add_library(altpars SHARED ${SOURCES} ${HEADERS})
