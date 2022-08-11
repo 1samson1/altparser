@@ -16,10 +16,13 @@ private:
     void parsArgs(int argc, char **argv);
     std::vector<std::string> getPaths();
     void downloadCache(std::vector<std::string> paths);
-    void diff(std::vector<std::string>);
+    std::string diff(std::vector<std::string>);
 
 public:
     Cli(int argc, char ** argv);
+
+    void tofile(std::string filename, std::string data);
+
     ~Cli(){};
 };
 

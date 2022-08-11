@@ -4,6 +4,8 @@
 #include "differ.h"
 #include "download.h"
 
+#include <fstream>
+
 using namespace std;
 
 Cli::Cli(int argc, char **argv)
@@ -17,8 +19,17 @@ Cli::Cli(int argc, char **argv)
         this->downloadCache(paths);    
     }
 
-    this->diff(paths);
-
+    if(this->outfile)
+    {
+        this->tofile(
+            this->outfilename,
+            this->diff(paths)
+        );
+    }
+    else 
+    {
+        cout << this->diff(paths);
+    }
 }
 
 void Cli::parsArgs(int argc, char **argv)
@@ -29,6 +40,7 @@ void Cli::parsArgs(int argc, char **argv)
 
         if(arg == "-o")
         {
+            this->outfile = true;
             this->outfilename = argv[i+1];
             
             i++;
@@ -80,14 +92,30 @@ void Cli::downloadCache(vector<string> paths)
     }    
 }
 
-void Cli::diff(vector<string> paths)
+string Cli::diff(vector<string> paths)
 {
-    cout << "Loading files..." << endl;
+    cout << "Loading files..." << endl;    
 
     LibAltParser::Differ differ(
         paths[0],
         paths[1]
     );
 
+    cout << "Diff files..." << endl;
+
     differ.diff();
+
+    return differ.getStructJSON();    
+}
+
+void Cli::tofile(string filename, string data){
+    ofstream fout(filename);
+
+    if(fout.is_open())
+    {      
+        cout << "Out to file " + filename + " ...";
+        fout << data;
+    }    
+
+    fout.close();
 }

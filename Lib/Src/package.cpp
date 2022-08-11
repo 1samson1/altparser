@@ -26,6 +26,22 @@ string Package::getVersion()
     return this->version.get();
 }
 
+json Package::toJSON()
+{
+    json data;
+
+    data["arch"] = this->arch;
+    data["buildtime"] = this->buildtime;
+    data["disttag"] = this->disttag;
+    data["epoch"] = this->epoch;
+    data["name"] = this->name;
+    data["release"] = this->release;
+    data["source"] = this->source;
+    data["version"] = this->version.get();
+
+    return data;
+}
+
 bool Package::operator== (Package &other)
 {
     return 

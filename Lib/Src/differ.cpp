@@ -64,6 +64,27 @@ void Differ::diff()
     }
 }
 
+string Differ::getStructJSON(){
+    json data;
+
+    for (auto &pkg : *this->onlyFirstExistPkgs)
+    {
+        data["onlyFirstExistPkgs"].push_back(pkg.toJSON());
+    }
+
+    for (auto &pkg : *this->onlySecondExistPkgs)
+    {
+        data["onlySecondExistPkgs"].push_back(pkg.toJSON());
+    }
+
+    for (auto &pkg : *this->upperFirstPkgs)
+    {
+        data["upperFirstPkgs"].push_back(pkg.toJSON());
+    }    
+
+    return data.dump();
+}
+
 Differ::~Differ()
 {
     delete this->onlyFirstExistPkgs;

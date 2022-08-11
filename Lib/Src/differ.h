@@ -15,11 +15,12 @@ namespace LibAltParser {
         std::list<Package>* onlySecondExistPkgs;
         std::list<Package>* upperFirstPkgs;
 
-
     public:
-        std::list<Package>* getPackeges(std::string filepath);
 
         Differ(std::string filepath1, std::string filepath2);
+
+        std::list<Package>* getPackeges(std::string filepath);
+        std::string getStructJSON();
 
         void diff();
 
