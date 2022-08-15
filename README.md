@@ -25,7 +25,7 @@ After a successful build, the altparser program will appear in the folder ./Buil
 
 To compare two branches, you can use:
 
-```bash
+```
 ./altparser <branch1> <branch2>
 ```
 For example:
@@ -36,7 +36,7 @@ For example:
 
 If you need to output a comparison to a file, you should add the "-o" key:
 
-```bash
+```
 ./altparser <branch1> <branch2> -o <file>
 ```
 For example:
@@ -48,7 +48,7 @@ For example:
 
 If you need to add indent space, you should add key "--indent":
 
-```bash
+```
 ./altparser <branch1> <branch2> --indent <count>
 ```
 For example:
@@ -60,7 +60,7 @@ For example:
 
 If you need to use cache, you should add key "--cache":
 
-```bash
+```
 ./altparser <branch1> <branch2> --cache
 ```
 For example:
