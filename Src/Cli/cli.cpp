@@ -121,7 +121,7 @@ void Cli::tofile(string filename, string data){
 
     if(fout.is_open())
     {      
-        cout << "Out to file " + filename + " ...";
+        cout << "Out to file " + filename + " ...\n";
         fout << data;
     }    
 

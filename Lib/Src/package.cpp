@@ -16,6 +16,8 @@ Package::Package(json &obj)
     this->version = obj["version"].get<string>();
 }
 
+// Methods
+
 string Package::getName()
 {
     return this->name;
@@ -42,16 +44,23 @@ json Package::toJSON()
     return data;
 }
 
+bool Package::isFresh (Package &other)
+{
+    return this->version > other.version &&
+        this->epoch >= other.epoch;
+}
+
+string Package::getHash()
+{
+    return this->name + "_" + this->arch;
+}
+
+// Operators
+
 bool Package::operator== (Package &other)
 {
     return 
         this->arch == other.arch &&        
         this->name == other.name
     ;
-}
-
-
-bool Package::operator> (Package &other)
-{
-    return this->version > other.version;
 }

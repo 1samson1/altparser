@@ -9,14 +9,13 @@ using json = nlohmann::json;
 
 Differ::Differ(string filepath1, string filepath2){
 
-    this->onlyFirstExistPkgs = this->getPackeges(filepath1);
-    this->onlySecondExistPkgs = this->getPackeges(filepath2);
+    this->firstBranchPkgs = this->getMapPackeges(filepath1);
+    this->secondBranchPkgs = this->getMapPackeges(filepath2);
 
 }
 
-list<Package>* Differ::getPackeges(string filepath)
+json Differ::getPackages(string filepath)
 {
-    auto pkgs = new list<Package>;
     json data;
 
     ifstream fin(filepath);    
@@ -26,6 +25,15 @@ list<Package>* Differ::getPackeges(string filepath)
     }
     fin.close();
 
+    return data;
+}
+
+list<Package>* Differ::getListPackeges(string filepath)
+{
+    auto pkgs = new list<Package>;
+    
+    auto data = this->getPackages(filepath);
+
     for (auto &el : data)
     {
         pkgs->push_back(Package (el));
@@ -34,33 +42,45 @@ list<Package>* Differ::getPackeges(string filepath)
     return pkgs;
 }
 
+map<string, Package>* Differ::getMapPackeges(string filepath)
+{
+    auto pkgs = new map<string, Package>;
+
+    auto data = this->getPackages(filepath);
+    
+    for (auto &el : data)
+    {
+        Package temp(el);
+
+        pkgs->emplace(temp.getHash(), temp);
+    }    
+
+    return pkgs;
+}
+
 void Differ::diff()
 {        
-    this->upperFirstPkgs = new list<Package>;
+    this->onlyFirstExistPkgs = new list<Package>;
+    this->onlySecondExistPkgs = new list<Package>;    
+    this->freshFirstPkgs = new list<Package>;
 
-    for(auto pkg1 = this->onlyFirstExistPkgs->begin(); pkg1 != this->onlyFirstExistPkgs->end() ; ++pkg1)
+
+    for(auto &it : *this->firstBranchPkgs)
     {
+
         // Find package in second branch
-        auto find_result = find_if(
-            this->onlySecondExistPkgs->begin(),
-            this->onlySecondExistPkgs->end(),
-            [&pkg1](Package pkg2) -> bool
-            {
-                return pkg2 == *pkg1;
-            }
-        );
+        auto find_result = this->secondBranchPkgs->find(it.second.getHash());        
 
-        if(find_result != this->onlySecondExistPkgs->end())
+        if(find_result != this->secondBranchPkgs->end())
         {
-            if(*pkg1 > *find_result){
-                this->upperFirstPkgs->push_back(*pkg1);
-            } 
-
-            pkg1 = (this->onlyFirstExistPkgs->erase(pkg1));
-            pkg1--;
-
-            this->onlySecondExistPkgs->erase(find_result);
-        }        
+            if(it.second.isFresh(find_result->second)){
+                this->freshFirstPkgs->push_back(it.second);
+            }
+        } 
+        else 
+        {   
+            this->onlyFirstExistPkgs->push_back(it.second);
+        }       
     }
 }
 
@@ -77,12 +97,17 @@ string Differ::getStructJSON(int indent){
         data["onlySecondExistPkgs"].push_back(pkg.toJSON());
     }
 
-    for (auto &pkg : *this->upperFirstPkgs)
+    for (auto &pkg : *this->freshFirstPkgs)
     {
-        data["upperFirstPkgs"].push_back(pkg.toJSON());
+        data["freshFirstPkgs"].push_back(pkg.toJSON());
     }    
 
-    return data.dump(indent);
+    if( indent != 0)
+    {
+        return data.dump(indent);
+    }
+
+    return data.dump();
 }
 
 Differ::~Differ()

@@ -27,9 +27,10 @@ namespace LibAltParser
         std::string getName();  
         std::string getVersion();
         nlohmann::json toJSON();
+        std::string getHash();
+        bool isFresh (Package &other);
 
         bool operator== (Package &other);
-        bool operator> (Package &other);
 
 
         ~Package(){};
