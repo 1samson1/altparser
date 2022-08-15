@@ -7,8 +7,9 @@ using namespace std;
 using namespace LibAltParser;
 using json = nlohmann::json;
 
-Differ::Differ(string filepath1, string filepath2){
-
+Differ::Differ(string filepath1, string filepath2)
+{
+    
     this->firstBranchPkgs = this->getMapPackeges(filepath1);
     this->secondBranchPkgs = this->getMapPackeges(filepath2);
 
@@ -28,9 +29,9 @@ json Differ::getPackages(string filepath)
     return data;
 }
 
-list<Package>* Differ::getListPackeges(string filepath)
+listPkg_t* Differ::getListPackeges(string filepath)
 {
-    auto pkgs = new list<Package>;
+    auto pkgs = new listPkg_t;
     
     auto data = this->getPackages(filepath);
 
@@ -42,9 +43,9 @@ list<Package>* Differ::getListPackeges(string filepath)
     return pkgs;
 }
 
-map<string, Package>* Differ::getMapPackeges(string filepath)
+mapPkg_t* Differ::getMapPackeges(string filepath)
 {
-    auto pkgs = new map<string, Package>;
+    auto pkgs = new mapPkg_t;
 
     auto data = this->getPackages(filepath);
     
@@ -59,29 +60,50 @@ map<string, Package>* Differ::getMapPackeges(string filepath)
 }
 
 void Differ::diff()
+{
+    auto firstBranchResult = this->diff_branch(
+        this->firstBranchPkgs,
+        this->secondBranchPkgs
+    );
+
+    auto secondBranchResult = this->diff_branch(
+        this->secondBranchPkgs,
+        this->firstBranchPkgs
+    );
+
+    // First branch
+    this->onlyFirstExistPkgs = firstBranchResult.first;
+    this->freshFirstPkgs = firstBranchResult.second;
+
+    // Second branch
+    this->onlySecondExistPkgs = secondBranchResult.first;
+
+}
+
+pair<listPkg_t *,listPkg_t*> Differ::diff_branch(mapPkg_t * const branch1, mapPkg_t * const branch2)
 {        
-    this->onlyFirstExistPkgs = new list<Package>;
-    this->onlySecondExistPkgs = new list<Package>;    
-    this->freshFirstPkgs = new list<Package>;
+    listPkg_t * onlyFirstExistPkgs = new listPkg_t;
+    listPkg_t * freshFirstPkgs = new listPkg_t;
 
-
-    for(auto &it : *this->firstBranchPkgs)
+    for(auto &it : *branch1)
     {
 
         // Find package in second branch
-        auto find_result = this->secondBranchPkgs->find(it.second.getHash());        
+        auto find_result = branch2->find(it.second.getHash());        
 
-        if(find_result != this->secondBranchPkgs->end())
+        if(find_result != branch2->end())
         {
             if(it.second.isFresh(find_result->second)){
-                this->freshFirstPkgs->push_back(it.second);
+                freshFirstPkgs->push_back(it.second);
             }
         } 
         else 
         {   
-            this->onlyFirstExistPkgs->push_back(it.second);
+            onlyFirstExistPkgs->push_back(it.second);
         }       
     }
+
+    return make_pair(onlyFirstExistPkgs, freshFirstPkgs);
 }
 
 string Differ::getStructJSON(int indent){
@@ -112,11 +134,11 @@ string Differ::getStructJSON(int indent){
 
 Differ::~Differ()
 {
-    delete this->onlyFirstExistPkgs;
-    this->onlyFirstExistPkgs = nullptr;
+    delete this->firstBranchPkgs;
+    this->firstBranchPkgs = nullptr;
 
-    delete this->onlySecondExistPkgs;
-    this->onlySecondExistPkgs = nullptr;
+    delete this->secondBranchPkgs;
+    this->secondBranchPkgs = nullptr;
 }
 
 
